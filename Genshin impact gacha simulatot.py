@@ -17,6 +17,7 @@ def single_pull(a,b,c):
     n = rd.random()  #放迴圈內才會每次刷新亂數
     
     result1 = ""
+    result2 = ""
     
     if 0 < n <= rate1:
         n10 = rd.random()
@@ -26,12 +27,14 @@ def single_pull(a,b,c):
             rate1 = 0.006
             result =  f'大保底：限定五星，當前機率：{rate1}'
             result1 = "限定五星(大)"
+            result2 = "限定五星"
         elif 0 <= n10 < 0.5:
             c = 0
             b = 0
             rate1 = 0.006
             result = f'小保底：限定五星，當前機率：{rate1}'
             result1 = "限定五星(小)"
+            result2 = "限定五星"
         elif 0.5 <= n10 <= 1:
             n20 = rd.random()
             if 0 <= n20 <= 0.05:
@@ -40,6 +43,7 @@ def single_pull(a,b,c):
                 c = 0            #重製保底抽數
                 result = f'捕獲明光：限定五星，當前機率：{rate1}'    #觸發特殊機制:捕獲明光
                 result1 = "限定五星(捕獲明光)"
+                result2 = "限定五星"
             elif 0.05 < n20 < 1:
                 c = 1            #下一個出限定五星
                 rate1 = 0.006    #重製機率
@@ -62,8 +66,10 @@ def single_pull(a,b,c):
         b += 1  #五星保底計數+1
         result = f'三星，距離五星保底剩餘：{90-b}，當前機率：{rate1}'
         result1 = "三星"
-    return result, a, b, c, result1
+    return result, a, b, c, result1, result2
 
+
+# 抽卡區
 while True:
     gacha = eval(input("請選擇單抽(1)或10連抽(10)，輸入0以結束抽卡："))
     #選單抽或10抽
@@ -75,24 +81,23 @@ while True:
         continue
     
     if gacha == 1:
-        result, a, b, c, result1 = single_pull(a, b, c)
+        result, a, b, c, result1, result2 = single_pull(a, b, c)
         print(result)
 
     if gacha == 10:
         results = []
         for i in range(10):
-            result, a, b, c, result1 = single_pull(a, b, c)
+            result, a, b, c, result1, result2 = single_pull(a, b, c)
             results.append(result1)
-            # print(result)
+            print(result)
         print("抽卡結果："," | ".join(results))
 
 
-#建立計數器
+# 統計區
 total_pulls = 0
 total_pulls2 = 0
 simulations = 10000
 
-#計算限定五星平均抽數
 for _ in range(simulations):
     a, b, c = 0, 0, 0
     pulls = 0
@@ -107,7 +112,7 @@ for _ in range(simulations):
 
 print("平均出限定五星抽數：", total_pulls / simulations)
 
-#計算五星平均抽數
+
 for _ in range(simulations):
     a, b, c = 0, 0, 0
     pulls2 = 0
@@ -121,5 +126,3 @@ for _ in range(simulations):
     total_pulls2 += pulls2
 
 print("平均出五星抽數：", total_pulls2 / simulations)
-
-    
