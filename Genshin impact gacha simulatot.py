@@ -87,6 +87,39 @@ while True:
         print("抽卡結果："," | ".join(results))
 
 
+#建立計數器
+total_pulls = 0
+total_pulls2 = 0
+simulations = 10000
 
+#計算限定五星平均抽數
+for _ in range(simulations):
+    a, b, c = 0, 0, 0
+    pulls = 0
+
+    while True:
+        result, a, b, c, result1, result2 = single_pull(a, b, c)
+        pulls += 1
+
+        if result2 == "限定五星":
+            break
+    total_pulls += pulls
+
+print("平均出限定五星抽數：", total_pulls / simulations)
+
+#計算五星平均抽數
+for _ in range(simulations):
+    a, b, c = 0, 0, 0
+    pulls2 = 0
+
+    while True:
+        result, a, b, c, result1, result2 = single_pull(a, b, c)
+        pulls2 += 1
+
+        if "五星" in result1:
+            break
+    total_pulls2 += pulls2
+
+print("平均出五星抽數：", total_pulls2 / simulations)
 
     
